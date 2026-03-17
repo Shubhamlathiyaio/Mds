@@ -48,20 +48,6 @@ class MyApp extends StatelessWidget {
             style: AppStyles.of(context).s16w400Black, 
             child: child!),
         ),
-      ),
-    );
-  }
-}
-```
-
----
-
-## 3. Custom Widgets (Best Features)
-
-### CustomImageView
-```dart
-class ImageView extends StatelessWidget {
-  const ImageView(this.imagePath, {super.key, this.fit = BoxFit.cover, this.radius, this.color});
   final String? imagePath;
   final double? radius;
   final BoxFit fit;
@@ -150,7 +136,7 @@ class AppButton extends StatelessWidget {
 
 ---
 
-## 4. Navigation (GoRouter)
+## 5. Navigation (GoRouter)
 
 ```dart
 final GoRouter router = GoRouter(
@@ -164,7 +150,7 @@ final GoRouter router = GoRouter(
 
 ---
 
-## 5. Bloc Implementation
+## 6. Bloc Implementation
 
 ### State Classes (Equatable)
 ```dart
@@ -185,18 +171,6 @@ BlocBuilder<HomeCubit, HomeState>(
   },
 )
 ```
-
----
-
-## 6. Guidance & Requirements
-
-> **🤖 AI Agent Instructions**:
->
-> 1.  **Reference**: Use THIS file as the single source.
-> 2.  **Widgets**: YOU MUST implement `CustomImageView`, `TextInputField`, `AppButton` in `lib/app/ui/widgets/`.
-> 3.  **State**: Use `Cubit` for simple state, `Bloc` for complex event-driven logic.
-> 4.  **Injection**: Blocs are retrieved via `getIt<MyBloc>()` inside `BlocProvider(create: ...)`.
-> 5.  **Ambiguity**: Ask setup questions before assuming logic.
 
 ---
 
@@ -224,13 +198,13 @@ class LocaleCubit extends Cubit<Locale> {
   }
 
   void _loadLocale() {
-    final savedLocale = getIt<SharedPreferences>().getString('locale') ?? 'en';
+    final savedLocale = getIt<GetStorage>().read('locale') ?? 'en';
     emit(Locale(savedLocale));
   }
 
   void changeLocale(String langCode) {
     emit(Locale(langCode));
-    getIt<SharedPreferences>().setString('locale', langCode);
+    getIt<GetStorage>().write('locale', langCode);
   }
 }
 ```
@@ -297,5 +271,13 @@ class MyApp extends StatelessWidget {
 
 ---
 
-**📌 Updated Guidance:**
-> 5. **Localization**: Use `context.t` for all strings in UI. Use `LocaleCubit` for language switching.
+## 8. Guidance & Requirements 📌
+
+> **🤖 AI Agent Instructions**:
+>
+> 1.  **Reference**: Use THIS file as the single source for functionality and architecture.
+> 2.  **Widgets**: YOU MUST implement `CustomImageView`, `TextInputField`, `AppButton` in `lib/app/ui/widgets/`.
+> 3.  **State**: Use `Cubit` for simple state, `Bloc` for complex event-driven logic.
+> 4.  **Injection**: Blocs are retrieved via `getIt<MyBloc>()` inside `BlocProvider(create: ...)`.
+> 5.  **Localization**: Use `context.t` for all strings. Use `LocaleCubit` for language switching.
+> 6.  **Unclear Requirements**: Ask the user before hallucinating business logic.

@@ -53,7 +53,23 @@ class MyApp extends ConsumerWidget {
 
 ---
 
-## 3. Custom Widgets (Best Features)
+## 3. Dependency Injection (GetIt + Injectable)
+
+### `injectable_properties.dart` (RegisterModule)
+```dart
+@module
+abstract class RegisterModule {
+  @preResolve
+  Future<GetStorage> storage() async {
+    await GetStorage.init();
+    return GetStorage(); 
+  }
+}
+```
+
+---
+
+## 4. Custom Widgets (Best Features)
 
 ### CustomImageView
 ```dart
@@ -147,7 +163,7 @@ class AppButton extends StatelessWidget {
 
 ---
 
-## 4. Navigation (GoRouter)
+## 5. Navigation (GoRouter)
 
 ```dart
 final routerProvider = Provider<GoRouter>((ref) {
@@ -163,7 +179,7 @@ final routerProvider = Provider<GoRouter>((ref) {
 
 ---
 
-## 5. State Management (Riverpod)
+## 6. State Management (Riverpod)
 
 ### Service Provider Bridge
 *Bridge GetIt repos to Riverpod.*
@@ -190,7 +206,9 @@ final homeProvider = AsyncNotifierProvider.autoDispose<HomeNotifier, List<Data>>
 
 ---
 
-## 6. Guidance & Requirements
+---
+
+## 8. Guidance & Requirements 📌
 
 > **🤖 AI Agent Instructions**:
 >
@@ -198,94 +216,5 @@ final homeProvider = AsyncNotifierProvider.autoDispose<HomeNotifier, List<Data>>
 > 2.  **Widgets**: YOU MUST implement `CustomImageView`, `TextInputField` (with `InputType`), `AppButton` in `lib/app/ui/widgets/`.
 > 3.  **State**: Use `AsyncNotifier` (not `StateNotifier`) for all methods loading data.
 > 4.  **Injection**: Inject Repos via `getIt` into Providers, then `ref.watch` in UI.
-
-
----
-
-## 7. Localization (Context Extension) 🌍
-
-### Extension Helper
-```dart
-// lib/app/utils/helpers/extensions/context_ext.dart
-extension AppExt on BuildContext {
-  AppLocalizations get t => AppLocalizations.of(this)!;
-  
-  // Bonus helpers
-  ThemeData get theme => Theme.of(this);
-  TextTheme get textTheme => Theme.of(this).textTheme;
-}
-```
-
-### Locale Management (Riverpod StateProvider)
-```dart
-// lib/app/providers/locale_provider.dart
-final localeProvider = StateProvider<Locale>((ref) {
-  final savedLocale = getIt<SharedPreferences>().getString('locale') ?? 'en';
-  return Locale(savedLocale);
-});
-
-// Helper to change locale
-extension LocaleRef on WidgetRef {
-  void changeLocale(String langCode) {
-    read(localeProvider.notifier).state = Locale(langCode);
-    getIt<SharedPreferences>().setString('locale', langCode);
-  }
-}
-```
-
-### Usage in Pages
-```dart
-class HomePage extends ConsumerWidget {
-  const HomePage({super.key});
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    return Scaffold(
-      appBar: AppBar(title: Text(context.t.homeTitle)),  // 👈 Use context.t
-      body: Column(
-        children: [
-          Text(context.t.welcomeMessage),
-          TextInputField(
-            type: InputType.email,
-            hintLabel: context.t.emailHint,
-            controller: emailCtrl,
-          ),
-          AppButton(
-            title: context.t.loginButton,
-            onPressed: () => ref.read(authProvider.notifier).login(),
-          ),
-        ],
-      ),
-    );
-  }
-}
-```
-
-### Change Language Anywhere
-```dart
-// In ConsumerWidget
-ref.changeLocale('es');  // Spanish
-ref.changeLocale('en');  // English
-```
-
-**✅ Update main.dart:**
-```dart
-class MyApp extends ConsumerWidget {
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final locale = ref.watch(localeProvider);  // 👈 Watch locale changes
-    
-    return MaterialApp.router(
-      locale: locale,
-      localizationsDelegates: AppLocalizations.localizationsDelegates,
-      supportedLocales: AppLocalizations.supportedLocales,
-      routerConfig: ref.watch(routerProvider),
-    );
-  }
-}
-```
-
----
-
-**📌 Updated Guidance:**
-> 5. **Localization**: Use `context.t` for all strings in UI. Use `localeProvider` for language switching.
+> 5.  **Localization**: Use `context.t` for all strings in UI. Use `localeProvider` for language switching.
+> 6.  **Unclear Requirements**: Ask the user before hallucinating business logic.

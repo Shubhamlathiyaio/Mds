@@ -477,5 +477,13 @@ class MyApp extends StatelessWidget {
 
 ---
 
-**📌 Updated Guidance:**
-> 5. **Localization**: Use `context.t` for all strings. Never use `Get.context!`.
+## 10. Guidance & Requirements 📌
+
+> **🤖 AI Agent Instructions**:
+>
+> 1.  **Reference**: Use THIS file as the single source for functionality and architecture.
+> 2.  **Widgets**: YOU MUST implement `CustomImageView`, `TextInputField`, `AppButton`, `CustomDropdown` EXACTLY as shown in `lib/app/ui/widgets/`. Do NOT use raw Flutter widgets in pages.
+> 3.  **Navigation**: Use `Get.toNamed` and `AppRoutes`.
+> 4.  **State**: Use `GetItHook` for page controllers to manage lifecycle.
+> 5.  **Localization**: Use `context.t` for all strings. Never use `Get.context!`.
+> 6.  **Unclear Requirements**: Ask the user before hallucinating business logic.
